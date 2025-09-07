@@ -31,7 +31,7 @@ local Icons = {
 function Notification:Notify(text, mode, duration)
 	mode = (mode or "info"):lower()
 	duration = duration or 3
-	local Iconssss = Icons[mode] or "ℹ️"
+	local emoji = Icons[mode] or "ℹ️"
 
 	local Frame = Instance.new('Frame')
 	Frame.Size = UDim2.new(0, 360, 0, 30)
@@ -43,15 +43,15 @@ function Notification:Notify(text, mode, duration)
 	UICorner.CornerRadius = UDim.new(0, 6)
 	UICorner.Parent = Frame
 
-	local Icon = Instance.new('TextLabel')
-	Icon.Size = UDim2.new(0, 24, 0, 24)
-	Icon.Position = UDim2.new(0, 4, 0.5, -12)
-	Icon.BackgroundTransparency = 1
-	Icon.Font = Enum.Font.SourceSansBold
-	Icon.TextSize = 18
-	Icon.Text = Iconssss
-	Icon.TextColor3 = Color3.fromRGB(255, 255, 255)
-	Icon.Parent = Frame
+	local IconLabel = Instance.new('TextLabel')
+	IconLabel.Size = UDim2.new(0, 24, 0, 24)
+	IconLabel.Position = UDim2.new(0, 4, 0.5, -12)
+	IconLabel.BackgroundTransparency = 1
+	IconLabel.Font = Enum.Font.SourceSansBold
+	IconLabel.TextSize = 18
+	IconLabel.Text = emoji
+	IconLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+	IconLabel.Parent = Frame
 
 	local TextLabel = Instance.new('TextLabel')
 	TextLabel.Size = UDim2.new(1, -32, 1, 0)
@@ -67,16 +67,16 @@ function Notification:Notify(text, mode, duration)
 
 	Frame.BackgroundTransparency = 1
 	TextLabel.TextTransparency = 1
-	Icon.TextTransparency = 1
+	IconLabel.TextTransparency = 1
 
 	TweenService:Create(Frame, TweenInfo.new(0.3), {BackgroundTransparency = 0.2}):Play()
 	TweenService:Create(TextLabel, TweenInfo.new(0.3), {TextTransparency = 0}):Play()
-	TweenService:Create(Icon, TweenInfo.new(0.3), {TextTransparency = 0}):Play()
+	TweenService:Create(IconLabel, TweenInfo.new(0.3), {TextTransparency = 0}):Play()
 
 	task.delay(duration, function()
 		TweenService:Create(Frame, TweenInfo.new(0.5), {BackgroundTransparency = 1}):Play()
 		TweenService:Create(TextLabel, TweenInfo.new(0.5), {TextTransparency = 1}):Play()
-		TweenService:Create(Icon, TweenInfo.new(0.5), {TextTransparency = 1}):Play()
+		TweenService:Create(IconLabel, TweenInfo.new(0.5), {TextTransparency = 1}):Play()
 		task.wait(0.6)
 		Frame:Destroy()
 	end)
