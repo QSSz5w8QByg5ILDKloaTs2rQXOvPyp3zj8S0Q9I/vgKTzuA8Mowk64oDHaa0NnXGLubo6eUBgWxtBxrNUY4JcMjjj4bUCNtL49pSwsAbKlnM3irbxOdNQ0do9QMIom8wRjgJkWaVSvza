@@ -31,7 +31,7 @@ local Icons = {
 function Notification:Notify(text, mode, duration)
 	mode = (mode or "info"):lower()
 	duration = duration or 3
-	local Icon = Icons[mode] or "ℹ️"
+	local Iconssss = Icons[mode] or "ℹ️"
 
 	local Frame = Instance.new('Frame')
 	Frame.Size = UDim2.new(0, 360, 0, 30)
@@ -49,7 +49,7 @@ function Notification:Notify(text, mode, duration)
 	Icon.BackgroundTransparency = 1
 	Icon.Font = Enum.Font.SourceSansBold
 	Icon.TextSize = 18
-	Icon.Text = Icon
+	Icon.Text = Iconssss
 	Icon.TextColor3 = Color3.fromRGB(255, 255, 255)
 	Icon.Parent = Frame
 
