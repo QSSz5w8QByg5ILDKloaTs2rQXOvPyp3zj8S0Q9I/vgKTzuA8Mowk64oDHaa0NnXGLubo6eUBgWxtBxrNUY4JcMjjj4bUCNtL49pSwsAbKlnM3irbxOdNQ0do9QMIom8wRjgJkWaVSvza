@@ -2,9 +2,6 @@ local Notification = {}
 Notification.__index = Notification
 
 local TweenService = game:GetService('TweenService')
-local HttpService = game:GetService('HttpService')
-
-local Icons = loadstring(game:HttpGet('https://raw.githubusercontent.com/SiriusSoftwareLtd/Rayfield/refs/heads/main/icons.lua'))()
 
 local ScreenGui = Instance.new('ScreenGui')
 ScreenGui.Name = 'NotificationGui'
@@ -24,25 +21,17 @@ UIListLayout.FillDirection = Enum.FillDirection.Vertical
 UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
 UIListLayout.Parent = Container
 
-local function getIcon(name)
-	name = string.match(string.lower(name), '^%s*(.*)%s*$')
-	local sizedicons = Icons['48px']
-	local r = sizedicons[name]
-	if not r then return nil end
-	local rirs = r[2]
-	local riro = r[3]
-	return {
-		id = r[1],
-		imageRectSize = Vector2.new(rirs[1], rirs[2]),
-		imageRectOffset = Vector2.new(riro[1], riro[2])
-	}
-end
+local Icons = {
+	success = "✅",
+	error = "❌",
+	warning = "⚠️",
+	info = "ℹ️"
+}
 
 function Notification:Notify(text, mode, duration)
-	mode = mode:lower()
+	mode = (mode or "info"):lower()
 	duration = duration or 3
-	local iconAsset = getIcon(mode)
-	if not iconAsset then return end
+	local Icon = Icons[mode] or "ℹ️"
 
 	local Frame = Instance.new('Frame')
 	Frame.Size = UDim2.new(0, 360, 0, 30)
@@ -54,13 +43,14 @@ function Notification:Notify(text, mode, duration)
 	UICorner.CornerRadius = UDim.new(0, 6)
 	UICorner.Parent = Frame
 
-	local Icon = Instance.new('ImageLabel')
+	local Icon = Instance.new('TextLabel')
 	Icon.Size = UDim2.new(0, 24, 0, 24)
 	Icon.Position = UDim2.new(0, 4, 0.5, -12)
 	Icon.BackgroundTransparency = 1
-	Icon.Image = 'rbxassetid://'..iconAsset.id
-	Icon.ImageRectOffset = iconAsset.imageRectOffset
-	Icon.ImageRectSize = iconAsset.imageRectSize
+	Icon.Font = Enum.Font.SourceSansBold
+	Icon.TextSize = 18
+	Icon.Text = Icon
+	Icon.TextColor3 = Color3.fromRGB(255, 255, 255)
 	Icon.Parent = Frame
 
 	local TextLabel = Instance.new('TextLabel')
@@ -70,23 +60,23 @@ function Notification:Notify(text, mode, duration)
 	TextLabel.Font = Enum.Font.SourceSansBold
 	TextLabel.TextSize = 18
 	TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-	TextLabel.Text = text..' !'
+	TextLabel.Text = text
 	TextLabel.RichText = true
 	TextLabel.TextXAlignment = Enum.TextXAlignment.Left
 	TextLabel.Parent = Frame
 
 	Frame.BackgroundTransparency = 1
 	TextLabel.TextTransparency = 1
-	Icon.ImageTransparency = 1
+	Icon.TextTransparency = 1
 
 	TweenService:Create(Frame, TweenInfo.new(0.3), {BackgroundTransparency = 0.2}):Play()
 	TweenService:Create(TextLabel, TweenInfo.new(0.3), {TextTransparency = 0}):Play()
-	TweenService:Create(Icon, TweenInfo.new(0.3), {ImageTransparency = 0}):Play()
+	TweenService:Create(Icon, TweenInfo.new(0.3), {TextTransparency = 0}):Play()
 
 	task.delay(duration, function()
 		TweenService:Create(Frame, TweenInfo.new(0.5), {BackgroundTransparency = 1}):Play()
 		TweenService:Create(TextLabel, TweenInfo.new(0.5), {TextTransparency = 1}):Play()
-		TweenService:Create(Icon, TweenInfo.new(0.5), {ImageTransparency = 1}):Play()
+		TweenService:Create(Icon, TweenInfo.new(0.5), {TextTransparency = 1}):Play()
 		task.wait(0.6)
 		Frame:Destroy()
 	end)
